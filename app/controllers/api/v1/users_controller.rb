@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :set_user, only: %i[show update destroy]
+  before_action :set_user, only: %i[show user_books update destroy]
 
   # GET /users
   def index
@@ -10,6 +10,10 @@ class Api::V1::UsersController < ApplicationController
   # GET /user/:id
   def show
     render json: @user
+  end
+
+  def user_books
+    render json: @user.books
   end
 
   # POST /users

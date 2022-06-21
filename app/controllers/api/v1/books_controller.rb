@@ -1,5 +1,5 @@
 class Api::V1::BooksController < ApplicationController
-before_action :find_book, only: [:show, :update, :destroy]
+before_action :find_book, only: [:show, :update, :destroy, :book_subjects]
 
   def index
     @books = Book.all
@@ -8,6 +8,10 @@ before_action :find_book, only: [:show, :update, :destroy]
 
   def show
     render json: @book
+  end
+
+  def book_subjects
+    render json: @book.subjects
   end
 
   def create
