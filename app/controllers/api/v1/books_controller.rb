@@ -4,6 +4,7 @@ before_action :find_book, only: [:show, :update, :destroy, :book_subjects]
   def index
     @books = Book.all
     render json: @books
+    puts params
   end
 
   def show
