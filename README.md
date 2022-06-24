@@ -8,9 +8,17 @@ A simple practice that how to create the rest API in the rails framework.
   - PostgreSQL 14.3
 
 * Usage
-  After git clone, please run `bundle install` & `bin/rails server`
+  After git clone, please run `bundle install` & `bin/rails db:setup` & `bin/rails server`
+  > `db:setup` stands for `db:create & db:migrate & db:seed`
 
-  Next, you may get
+* Generate User Login Token
+  - please use `POST` method to send a request to URL `http://localhost:3000/auth/login` 
+  - request params with test account `username: Joshua 1` & `password: password1`
+  - then you will get a `token` in response body
+
+---
+  below to be update
+
   - all users
     - by pasting this URL `http://localhost:3000/api/v1/users` in your browser or in postman with `GET` method, and get the response of a JSON: 
   ```json
