@@ -7,10 +7,11 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :users
-
       get 'books', to: 'books#index'
+      post 'books', to: 'books#create'
       get 'books/:id', to: 'books#show'
       patch 'books/:id', to: 'books#update'
+      delete 'books/:id', to: 'books#destroy'
     end
   end
 end

@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   skip_before_action :authenticate_request, only: [:create]
-  # before_action :set_user, only: %i[show user_books update destroy]
+  before_action :set_user, only: %i[show update destroy]
 
   # GET /users
   def index
@@ -8,13 +8,13 @@ class Api::V1::UsersController < ApplicationController
     render json: @users, status: :ok
   end
 
-  # GET /user/:id
+  # GET /users/:id
   def show
-    render json: @user, status: :ok
-  end
-
-  def user_books
-    render json: @user.books, status: :ok
+    if @user&.id == @current_user.id
+      render json: @user, status: :ok
+    else
+      render json: { error: 'Unable to access user.' }, status: :bad_request
+    end
   end
 
   # POST /users
@@ -29,7 +29,7 @@ class Api::V1::UsersController < ApplicationController
 
   # PUT /users/:id
   def update
-    if @user
+    if @user&.id == @current_user.id
       @user.update(user_params)
       render json: { message: 'User successfully update.' }, status: :ok
     else
@@ -39,8 +39,8 @@ class Api::V1::UsersController < ApplicationController
 
   # DELETE /users/:id
   def destroy
-    if @user
-      @user.destroy(user_params)
+    if @user&.id == @current_user.id
+      @user.destroy
       render json: { message: 'User successfully deleted.' }, status: :ok
     else
       render json: { error: 'Unable to delete user.' }, status: :bad_request

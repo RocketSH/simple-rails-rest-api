@@ -1,18 +1,18 @@
 class Api::V1::BooksController < ApplicationController
-  before_action :find_book, only: %i[show update destroy book_subjects]
+  before_action :set_book, only: %i[show update destroy]
 
   def index
-    @books = Book.all
+    @books = User.find(@current_user.id).books
     render json: @books
     puts params
   end
 
   def show
-    render json: @book
-  end
-
-  def book_subjects
-    render json: @book.subjects
+    if @book&.user_id == @current_user.id
+      render json: @book
+    else
+      render json: { error: 'Only owner can access this book.' }, status: :bad_request
+    end 
   end
 
   def create
@@ -20,35 +20,35 @@ class Api::V1::BooksController < ApplicationController
     if @book.save
       render json: @book
     else
-      render error: { error: 'Unable to create Book.' }, status: 400
+      render error: { error: 'Unable to create Book.' }, status: :unprocessable_entity
     end
   end
 
   def update
-    if @book
+    if @book&.user_id == @current_user.id
       @book.update(book_params)
-      render json: { message: 'Book successfully update.' }, status: 200
+      render json: { message: 'Book successfully update.' }, status: :ok
     else
-      render json: { error: 'Unable to update Book.' }, status: 400
+      render json: { error: 'Unable to update Book.' }, status: :unprocessable_entity
     end
   end
 
   def destroy
-    if @book
+    if @book&.user_id == @current_user.id
       @book.destroy
-      render json: { message: 'Book successfully deleted.' }, status: 200
+      render json: { message: 'Book successfully deleted.' }, status: :ok
     else
-      render json: { error: 'Unable to delete Book. ' }, status: 400
+      render json: { error: 'Unable to delete Book.' }, status: :unprocessable_entity
     end
   end
 
   private
 
   def book_params
-    params.require(:book).permit(:book, :likes, :user_id)
+    params.require(:book).permit(:book_name, :likes, :user_id)
   end
 
-  def find_book
+  def set_book
     @book = Book.find(params[:id])
   end
 end
