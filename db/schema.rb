@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_24_101837) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_27_141310) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "books", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.string "book_name"
+    t.string "book_name", null: false
     t.integer "likes_books"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -33,10 +33,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_24_101837) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "username"
-    t.string "password_digest"
+    t.string "username", null: false
+    t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "admin", default: false
   end
 
   add_foreign_key "books", "users"

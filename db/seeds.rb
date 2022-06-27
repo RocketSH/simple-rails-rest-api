@@ -7,3 +7,5 @@ end
 end
 # . . .
 Book.create!(book_name: "Testing Book #{3}", likes_books: 3, user_id: 2)
+# . . .
+User.create!(username: "Joshua #{3}", password: "password#{3}", admin: true)

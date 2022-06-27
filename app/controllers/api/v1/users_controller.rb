@@ -4,13 +4,18 @@ class Api::V1::UsersController < ApplicationController
 
   # GET /users
   def index
-    @users = User.all
-    render json: @users, status: :ok
+    if @current_user.admin == true
+      @users = User.all
+      render json: @users, status: :ok
+    else
+      @user = User.find(@current_user.id)
+      render json: @user, status: :ok
+    end
   end
 
   # GET /users/:id
   def show
-    if @user&.id == @current_user.id
+    if @user&.id == @current_user.id || @current_user.admin == true
       render json: @user, status: :ok
     else
       render json: { error: 'Unable to access user.' }, status: :bad_request
@@ -29,7 +34,7 @@ class Api::V1::UsersController < ApplicationController
 
   # PUT /users/:id
   def update
-    if @user&.id == @current_user.id
+    if @user&.id == @current_user.id || @current_user.admin == true
       @user.update(user_params)
       render json: { message: 'User successfully update.' }, status: :ok
     else
@@ -39,7 +44,7 @@ class Api::V1::UsersController < ApplicationController
 
   # DELETE /users/:id
   def destroy
-    if @user&.id == @current_user.id
+    if @user&.id == @current_user.id || @current_user.admin == true
       @user.destroy
       render json: { message: 'User successfully deleted.' }, status: :ok
     else

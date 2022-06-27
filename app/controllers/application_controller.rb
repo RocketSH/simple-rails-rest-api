@@ -2,8 +2,8 @@ class ApplicationController < ActionController::API
   include JsonWebToken
   before_action :authenticate_request
 
-  def not_found
-    render json: { error: "Can't find this page." }
+  def raise_not_found
+    render json: { error: "No route matches #{params[:unmatched_route]}" }
   end
 
   private
