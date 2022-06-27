@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   skip_before_action :authenticate_request, only: [:create]
-  before_action :set_user, only: %i[show user_books update destroy]
+  # before_action :set_user, only: %i[show user_books update destroy]
 
   # GET /users
   def index
@@ -29,7 +29,7 @@ class Api::V1::UsersController < ApplicationController
 
   # PUT /users/:id
   def update
-    if @user 
+    if @user
       @user.update(user_params)
       render json: { message: 'User successfully update.' }, status: :ok
     else
@@ -39,7 +39,7 @@ class Api::V1::UsersController < ApplicationController
 
   # DELETE /users/:id
   def destroy
-    if @user 
+    if @user
       @user.destroy(user_params)
       render json: { message: 'User successfully deleted.' }, status: :ok
     else

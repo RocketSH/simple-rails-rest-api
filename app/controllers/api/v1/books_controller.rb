@@ -1,5 +1,5 @@
 class Api::V1::BooksController < ApplicationController
-before_action :find_book, only: [:show, :update, :destroy, :book_subjects]
+  before_action :find_book, only: %i[show update destroy book_subjects]
 
   def index
     @books = Book.all
@@ -18,27 +18,27 @@ before_action :find_book, only: [:show, :update, :destroy, :book_subjects]
   def create
     @book = Book.new(book_params)
     if @book.save
-     render json: @book
+      render json: @book
     else
-     render error: { error: 'Unable to create Book.'}, status: 400
+      render error: { error: 'Unable to create Book.' }, status: 400
     end
   end
 
   def update
     if @book
-     @book.update(book_params)
-     render json: { message: 'Book successfully update.'}, status:200
+      @book.update(book_params)
+      render json: { message: 'Book successfully update.' }, status: 200
     else
-     render json: { error: 'Unable to update Book.'}, status:400
+      render json: { error: 'Unable to update Book.' }, status: 400
     end
   end
 
   def destroy
     if @book
-     @book.destroy
-     render json: { message: 'Book successfully deleted.'}, status:200
+      @book.destroy
+      render json: { message: 'Book successfully deleted.' }, status: 200
     else
-      render json: { error: 'Unable to delete Book. '}, status:400
+      render json: { error: 'Unable to delete Book. ' }, status: 400
     end
   end
 
