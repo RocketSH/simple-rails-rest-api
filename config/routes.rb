@@ -2,7 +2,6 @@
 
 Rails.application.routes.draw do
   post '/auth/login', to: 'authentication#login'
-
   namespace :api do
     namespace :v1 do
       resources :users
@@ -13,4 +12,5 @@ Rails.application.routes.draw do
       delete 'books/:id', to: 'books#destroy'
     end
   end
+  get '*unmatched_route', to: 'application#not_found'
 end

@@ -2,7 +2,7 @@ class Api::V1::BooksController < ApplicationController
   before_action :set_book, only: %i[show update destroy]
 
   def index
-    if @current_user.admin == true
+    if @current_user.admin
       @books = Book.all
     else
       @books = User.find(@current_user.id).books
@@ -11,7 +11,7 @@ class Api::V1::BooksController < ApplicationController
   end
 
   def show
-    if @book&.user_id == @current_user.id || @current_user.admin == true
+    if @book&.user_id == @current_user.id || @current_user.admin
       render json: @book
     else
       render json: { error: 'Sorry, only the owner allows accessing this book.' }, status: :bad_request
@@ -28,8 +28,9 @@ class Api::V1::BooksController < ApplicationController
   end
 
   def update
-    if @book&.user_id == @current_user.id || @current_user.admin == true
-      @book.update(book_params)
+    authorize @book
+    # if @book&.user_id == @current_user.id || @current_user.admin
+    if @book.update(book_params)
       render json: { message: 'Book successfully update.' }, status: :ok
     else
       render json: { error: 'Unable to update Book.' }, status: :unprocessable_entity
@@ -37,7 +38,7 @@ class Api::V1::BooksController < ApplicationController
   end
 
   def destroy
-    if @book&.user_id == @current_user.id || @current_user.admin == true
+    if @book&.user_id == @current_user.id || @current_user.admin
       @book.destroy
       render json: { message: 'Book successfully deleted.' }, status: :ok
     else
