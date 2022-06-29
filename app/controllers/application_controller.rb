@@ -1,11 +1,15 @@
 class ApplicationController < ActionController::API
   include JsonWebToken
-  include Pundit
+  include Pundit::Authorization
   before_action :authenticate_request
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   def not_found
     render json: { error: "No route matches #{params[:unmatched_route]}" }
+  end
+
+  def pundit_user
+    @current_user
   end
 
   private
@@ -24,6 +28,6 @@ class ApplicationController < ActionController::API
   end
 
   def user_not_authorized
-    render json: { error: "Sorry, you are not authorized to do this." }
+    render json: { error: "Sorry, you are not authorized to do this." }, status: :forbidden
   end
 end

@@ -1,11 +1,11 @@
-class BookPolicy < ApplicationPolicy
+class UserPolicy < ApplicationPolicy
 
   def index?
     user.admin? || user.id
   end
 
   def show?
-    user.admin? || user.id == @record.user_id
+    user.admin? || user.id == @record.id
   end
 
   def create?
@@ -17,7 +17,7 @@ class BookPolicy < ApplicationPolicy
   end
 
   def update?
-    user.admin? || user.id == @record.user_id
+    user.admin? || user.id == @record.id
   end
 
   def edit?
@@ -25,7 +25,7 @@ class BookPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.admin? || user.id == @record.user_id
+    user.admin? || user.id == @record.id
   end
 
 end

@@ -1,29 +1,22 @@
 class Api::V1::UsersController < ApplicationController
-  skip_before_action :authenticate_request, only: [:create]
   before_action :set_user, only: %i[show update destroy]
 
   # GET /users
   def index
-    if @current_user.admin
-      @users = User.all
-      render json: @users, status: :ok
-    else
-      @user = User.find(@current_user.id)
-      render json: @user, status: :ok
-    end
+    authorize User
+    @users = @current_user.admin ? User.all : User.find(@current_user.id)
+    render json: @users
   end
 
   # GET /users/:id
   def show
-    if @user&.id == @current_user.id || @current_user.admin
-      render json: @user, status: :ok
-    else
-      render json: { error: 'Unable to access user.' }, status: :bad_request
-    end
+    authorize @user
+    render json: @user
   end
 
   # POST /users
   def create
+    authorize User
     @user = User.new(user_params)
     if @user.save
       render json: @user, status: :created
@@ -34,9 +27,9 @@ class Api::V1::UsersController < ApplicationController
 
   # PUT /users/:id
   def update
-    if @user&.id == @current_user.id || @current_user.admin
-      @user.update(user_params)
-      render json: { message: 'User successfully update.' }, status: :ok
+    authorize @user
+    if @user.update(user_params)
+      render json: { message: 'User successfully update.' }
     else
       render json: { error: 'Unable to update user.' }, status: :unprocessable_entity
     end
@@ -44,9 +37,9 @@ class Api::V1::UsersController < ApplicationController
 
   # DELETE /users/:id
   def destroy
-    if @user&.id == @current_user.id || @current_user.admin
-      @user.destroy
-      render json: { message: 'User successfully deleted.' }, status: :ok
+    authorize @user
+    if @user.destroy
+      render json: { message: 'User successfully deleted.' }
     else
       render json: { error: 'Unable to delete user.' }, status: :bad_request
     end
