@@ -4,7 +4,7 @@ class Api::V1::UsersController < ApplicationController
   # GET /users
   def index
     authorize User
-    @users = @current_user.admin ? User.all : User.find(@current_user.id)
+    @users = @current_user.admin ? User.all : [@current_user]
     render json: @users
   end
 

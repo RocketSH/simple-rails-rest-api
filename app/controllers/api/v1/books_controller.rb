@@ -3,7 +3,7 @@ class Api::V1::BooksController < ApplicationController
 
   def index
     authorize Book
-    @books = @current_user.admin ? Book.all : User.find(@current_user.id).books
+    @books = @current_user.admin ? Book.all : @current_user.books
     render json: @books
   end
 
